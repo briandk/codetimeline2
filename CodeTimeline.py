@@ -13,7 +13,7 @@ def get_nearest_git_repo(directory):
     click.echo(f"is .git a subdirectory? {os.path.isdir('.git')}")
 
     if os.path.isdir(os.path.join(directory, ".git")) is True:
-        return directorycd
+        return directory
     head, tail = os.path.split(directory)
     click.echo(f"head is {head}")
     if tail is not "":
