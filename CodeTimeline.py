@@ -39,5 +39,17 @@ def report_if_repository_is_dirty(repo: Repo) -> None:
         exit
 
 
+def sanitizeFilepath(filepath: str) -> str:
+    """
+    Takes a path to a file, however the user wants to specify it,
+    and "cleans" it by normalizing, expanding home directories, and making it an absolute path.
+    """
+    filepath = os.path.expanduser(filepath)
+    if os.path.isabs(filepath) == False:
+        filepath = os.path.join(os.getcwd(), filepath)
+    filepath = os.path.normpath(filepath)
+    return filepath
+
+
 if __name__ == "__main__":
     code_timeline()
