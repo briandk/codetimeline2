@@ -6,7 +6,7 @@
         {
             "label": "code_timeline",
             "type": "shell",
-            "command": "python CodeTimeline.py ~/Developer/transcriptase/src/renderer/matchTimestamps.ts ~/Desktop/CodeTimeline Output/codetimeline-output.html",
+            "command": "python3 CodeTimeline.py --input ~/Developer/transcriptase/src/renderer/matchTimestamps.ts --output ~/Desktop/CodeTimeline-Output/codetimeline-output.html",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
