@@ -11,13 +11,11 @@ from typing import Union
     "--output", default="timeline.html", help="An optional name for the output file"
 )
 def code_timeline(input: str, output: str) -> None:
-    git_path = get_nearest_git_repo(input)
-    repository = Repo(git_path)
+    repository = Repo(get_nearest_git_repo(input))
     report_if_repository_is_dirty(repository)
-    click.echo(f"git directory is {git_path}")
+    click.echo(f"git directory is {repository}")
 
 
-def get_nearest_git_repo(directory: str) -> Union[str, None]:
 def get_nearest_git_repo(filepath: str) -> Union[str, None]:
     """
     Takes a filepath and recursively searches upward to find
