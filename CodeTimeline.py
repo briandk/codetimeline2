@@ -13,18 +13,13 @@ from git import Repo
 def code_timeline(input: str, output: str) -> None:
     git_path = get_nearest_git_repo(input)
     repository = Repo(git_path)
-    if repository.is_dirty():
-        click.echo(
-            "It looks like some files in this repo haven't had their changes committed. Please get the repository into a clean state before running CodeTimeline"
-        )
-        exit
+    report_if_repository_is_dirty(repository)
     click.echo(f"git directory is {git_path}")
-    click.echo(repository)
 
 
 def get_nearest_git_repo(directory: str) -> Union[str, None]:
-    click.echo(f"current directory is {directory}")
-    click.echo(f"is .git a subdirectory? {os.path.isdir('.git')}")
+    # click.echo(f"current directory is {directory}")
+    # click.echo(f"is .git a subdirectory? {os.path.isdir('.git')}")
 
     if os.path.isdir(os.path.join(directory, ".git")) is True:
         return directory
@@ -34,6 +29,14 @@ def get_nearest_git_repo(directory: str) -> Union[str, None]:
         return get_nearest_git_repo(head)
     else:
         return None
+
+
+def report_if_repository_is_dirty(repo: Repo) -> None:
+    if repo.is_dirty():
+        click.echo(
+            "ERROR: Repo not clean. It looks like some files in this repo haven't had their changes committed. Please get the repository into a clean state before running CodeTimeline"
+        )
+        exit
 
 
 if __name__ == "__main__":
