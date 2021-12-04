@@ -13,7 +13,20 @@ from typing import Union
 def code_timeline(input: str, output: str) -> None:
     repository = Repo(get_nearest_git_repo(input))
     report_if_repository_is_dirty(repository)
+    with open("timeline_view.mustache", "r") as source:
+        with open(output, "w") as destination:
+            destination.write(source.read())
     click.echo(f"git directory is {repository}")
+
+
+def writeCodeTimelineToFile(destination: str) -> None:
+    """
+    Takes a destination filepath and writes the CodeTimeline HTML
+    to that path.
+    """
+    with open("timeline_view.mustache", "r") as src:
+        with open(destination, "w") as dest:
+            dest.write(src.read())
 
 
 def get_nearest_git_repo(filepath: str) -> Union[str, None]:
