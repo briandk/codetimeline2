@@ -1,8 +1,8 @@
 import click
 import os
 
-from typing import Union
 from git import Repo
+from typing import Union
 
 
 @click.command()
