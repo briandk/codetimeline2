@@ -18,13 +18,18 @@ def code_timeline(input: str, output: str) -> None:
 
 
 def get_nearest_git_repo(directory: str) -> Union[str, None]:
+def get_nearest_git_repo(filepath: str) -> Union[str, None]:
+    """
+    Takes a filepath and recursively searches upward to find
+    the nearest git repository
+    """
     # click.echo(f"current directory is {directory}")
     # click.echo(f"is .git a subdirectory? {os.path.isdir('.git')}")
 
-    if os.path.isdir(os.path.join(directory, ".git")) is True:
-        return directory
+    if os.path.isdir(os.path.join(filepath, ".git")) is True:
+        return filepath
 
-    head, tail = os.path.split(directory)
+    head, tail = os.path.split(filepath)
     if tail != "":
         return get_nearest_git_repo(head)
     else:
