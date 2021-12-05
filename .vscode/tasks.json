@@ -6,7 +6,17 @@
         {
             "label": "code_timeline",
             "type": "shell",
-            "command": "python3 CodeTimeline.py --input ~/Developer/transcriptase/src/renderer/matchTimestamps.ts --output ~/Desktop/CodeTimeline-Output/codetimeline-output.html",
+            "command": [
+                "~/opt/miniconda3/envs/codetimeline2/bin/python",
+                "CodeTimeline.py",
+                "--input ~/dev/transcriptase/src/renderer/matchTimestamps.ts",
+                "--output /Users/briandk/Desktop/CodeTimeline-Output/codetimeline-output.html",
+            ],
+            // "command": [
+            //     "~/opt/miniconda3/envs/codetimeline2/bin/python",
+            //     "CodeTimeline.py",
+            //     "--input ~/Developer/transcriptase/src/renderer/matchTimestamps.ts",
+            //     "--output ~/Desktop/CodeTimeline-Output/codetimeline-output.html"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
