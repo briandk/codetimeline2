@@ -8,7 +8,9 @@ from typing import Union
 @click.command()
 @click.option("--input", help="The file you'd like to see a timeline of")
 @click.option(
-    "--output", default="timeline.html", help="An optional name for the output file"
+    "--output",
+    default="timeline.html",
+    help="An optional name for the output file",
 )
 def code_timeline(input: str, output: str) -> None:
     repository = Repo(get_nearest_git_repo(input))
