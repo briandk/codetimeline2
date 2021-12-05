@@ -1,5 +1,6 @@
 import click
 import os
+import sys
 
 from git import Repo
 from pybars import Compiler
@@ -15,26 +16,42 @@ from typing import Union
 )
 def code_timeline(input: str, output: str) -> None:
     repository = Repo(get_nearest_git_repo(input))
+    # click.echo(f"git directory is {repository}")
     report_if_repository_is_dirty(repository)
-    with open("timeline_view.mustache", "r") as source:
-        with open(output, "w") as destination:
-            destination.write(source.read())
-    click.echo(f"git directory is {repository}")
+    writeTimelineToFile(output, compile_timeline_template())
+    click.echo("All done!")
+
+
+def timeline_template():
+    with open(os.path.join("external_files", "bootstrap.min.js")) as f:
+        bootstrap_script = f.read()
+    with open(os.path.join("external_files", "bootstrap.css")) as f:
+        bootstrap_css = f.read()
+    return {
+        "bootstrap_css": bootstrap_css,
+        "bootstrap_js": bootstrap_script,
+        "revisions": "revisions",
+    }
 
 
 def compile_timeline_template():
-    # Get a compiler
+    """Injects the CodeTimeline data into the template
+    and returns a single HTML document
+    """
     compiler = Compiler()
+    with open("timeline_view.handlebars", "r", encoding="utf8") as f:
+        raw_template = f.read()
+    template = compiler.compile(raw_template)
+    return str(template(timeline_template()))
 
 
-def writeCodeTimelineToFile(destination: str) -> None:
+def writeTimelineToFile(output_path: str, timeline: str) -> None:
     """
-    Takes a destination filepath and writes the CodeTimeline HTML
-    to that path.
+    Writes the CodeTimeline HTML out to a file
     """
-    with open("timeline_view.mustache", "r") as src:
-        with open(destination, "w") as dest:
-            dest.write(src.read())
+    print(f"Output path is {output_path}")
+    with open(output_path, "w", encoding="utf8") as f:
+        f.write(timeline)
 
 
 def get_nearest_git_repo(filepath: str) -> Union[str, None]:
@@ -58,18 +75,24 @@ def get_nearest_git_repo(filepath: str) -> Union[str, None]:
 def report_if_repository_is_dirty(repo: Repo) -> None:
     if repo.is_dirty():
         click.echo(
-            "ERROR: Repo not clean. It looks like some files in this repo haven't had their changes committed. Please get the repository into a clean state before running CodeTimeline"
+            """
+ERROR: Repo not clean.
+It looks like some files in this repo haven't had their changes committed.
+Please get the repository into a clean state before running CodeTimeline
+"""
         )
-        exit
+        sys.exit()
+    else:
+        return None
 
 
-def sanitizeFilepath(filepath: str) -> str:
+def sanitize_filepath(filepath: str) -> str:
     """
     Takes a path to a file, however the user wants to specify it,
     and "cleans" it by normalizing, expanding home directories, and making it an absolute path.
     """
     filepath = os.path.expanduser(filepath)
-    if os.path.isabs(filepath) == False:
+    if not os.path.isabs(filepath):
         filepath = os.path.join(os.getcwd(), filepath)
     filepath = os.path.normpath(filepath)
     return filepath
