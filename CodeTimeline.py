@@ -2,6 +2,7 @@ import click
 import os
 
 from git import Repo
+from pybars import Compiler
 from typing import Union
 
 
@@ -19,6 +20,11 @@ def code_timeline(input: str, output: str) -> None:
         with open(output, "w") as destination:
             destination.write(source.read())
     click.echo(f"git directory is {repository}")
+
+
+def compile_timeline_template():
+    # Get a compiler
+    compiler = Compiler()
 
 
 def writeCodeTimelineToFile(destination: str) -> None:
