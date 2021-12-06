@@ -25,13 +25,16 @@ def code_timeline(input: str, output: str) -> None:
 def external_files() -> dict:
     with open(os.path.join("external_files", "bootstrap.css")) as f:
         bootstrap_css = f.read()
-    with open(os.path.join("external_files", "bootstrap.min.js")) as f:
+    with open(os.path.join("external_files", "bootstrap.js")) as f:
         bootstrap_script = f.read()
 
     return {"bootstrap_css": bootstrap_css, "bootstrap_js": bootstrap_script}
 
 
 def timeline_template() -> dict:
+    """Returns a data object that can then be
+    passed to a Handlebars compiler
+    """
     return external_files()
 
 
