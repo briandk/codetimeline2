@@ -1,29 +1,33 @@
 <html>
+
 <head>
   <title>Timeline</title>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="TimelineStyle.css">
   <link rel="stylesheet" type="text/css" href="prism.css">
-  <style>{{bootstrap_css}}</style>
+  <style>
+    {{{bootstrap_css}}}
+  </style>
 </head>
+
 <body class="pad-body-for-navbar">
   <table>
     <tr>
       {{#snapshots}}
-        <td id="{{revision}}">
-          <div class="snapshotMetadata">
-            <div class="timestamp">
-              <time>{{timestamp}}</time>
-            </div>
-            <div id="sha">
-              <code><a class="shaLink" href="#">{{{shortHash}}}</a></code>
-            </div>
+      <td id="{{revision}}">
+        <div class="snapshotMetadata">
+          <div class="timestamp">
+            <time>{{timestamp}}</time>
           </div>
-          <div class="codesnapshot">
-            <pre class="language-python" data-line="{{changedLines}}"><code>{{code}}</code>
+          <div id="sha">
+            <code><a class="shaLink" href="#">{{{shortHash}}}</a></code>
+          </div>
+        </div>
+        <div class="codesnapshot">
+          <pre class="language-python" data-line="{{changedLines}}"><code>{{code}}</code>
           </div>
           </pre>
-        </td>
+      </td>
       {{/snapshots}}
     </tr>
   </table>
@@ -42,27 +46,27 @@
             <li class="zoomLevel" id="zoom4x" data-zoom="4"><a href="#">4X</a></li>
             <li class="zoomLevel" id="zoom8x" data-zoom="8"><a href="#">8X</a></li>
             <li class="zoomLevel" id="zoom16x" data-zoom="16"><a href="#">16X</a></li>
-          </ul></li>
+          </ul>
+        </li>
         <li class="divider-vertical"></li>
         <li>
           <div class="pagination" id="pager">
             <ul>
-              <li id="first-commit-btn"
-                  class="pager-btn page-backward">
-                  <a href="#">&laquo;</a></li>
-              <li id="prev-commit-btn"
-                  class="pager-btn page-backward"
-                  data-counter-increment="-1">
-                  <a href="#">&larr;</a></li>
+              <li id="first-commit-btn" class="pager-btn page-backward">
+                <a href="#">&laquo;</a>
+              </li>
+              <li id="prev-commit-btn" class="pager-btn page-backward" data-counter-increment="-1">
+                <a href="#">&larr;</a>
+              </li>
               <li class="pager-btn disabled">
-                <a href="#"><code id="shaDisplay">shaDisplay</code></a></li>
-              <li id="next-commit-btn"
-                  class="pager-btn page-forward"
-                  data-counter-increment="+1">
-                  <a href="#">&rarr;</a></li>
-              <li id="last-commit-btn"
-                  class="pager-btn page-forward">
-                  <a href="#">&raquo;</a></li>
+                <a href="#"><code id="shaDisplay">shaDisplay</code></a>
+              </li>
+              <li id="next-commit-btn" class="pager-btn page-forward" data-counter-increment="+1">
+                <a href="#">&rarr;</a>
+              </li>
+              <li id="last-commit-btn" class="pager-btn page-forward">
+                <a href="#">&raquo;</a>
+              </li>
             </ul>
           </div>
         </li>
@@ -70,24 +74,19 @@
       </ul>
       <form class="navbar-form form-search" id="shaForm">
         <div class="input-group">
-          <input type="text"
-                 class="search-query span2"
-                 id="shaSearch"
-                 autocomplete="off"
-                 placeholder="Type a SHA-1">
-          <button type=""
-                  class="btn"
-                  id="goToSha">Go!</button>
+          <input type="text" class="search-query span2" id="shaSearch" autocomplete="off" placeholder="Type a SHA-1">
+          <button type="" class="btn" id="goToSha">Go!</button>
         </div>
       </form>
     </div>
   </div>
   <script src="prism.js" type="text/javascript"></script>
   <script src="jQuery.js" type="text/javascript"></script>
-  <script>{{bootstrap_js}}</script>
+  <script>{{{bootstrap_js}}}</script>
   <script type="text/javascript">
     var revisions = [{{{revisions}}}];
   </script>
   <script src="Timeline.js" type="text/javascript"></script>
 </body>
+
 </html>
