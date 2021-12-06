@@ -4,6 +4,21 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "CodeTimeline - Work Laptop",
+            "type": "shell",
+            "command": [
+                "/opt/homebrew/bin/python3",
+                "CodeTimeline.py",
+                "--input ~/Developer/transcriptase/src/renderer/matchTimestamps.ts",
+                "--output ~/Desktop/CodeTimeline-Output/codetimeline-output.html"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
             "label": "code_timeline",
             "type": "shell",
             "command": [
@@ -12,11 +27,6 @@
                 "--input ~/dev/transcriptase/src/renderer/matchTimestamps.ts",
                 "--output /Users/briandk/Desktop/CodeTimeline-Output/codetimeline-output.html",
             ],
-            // "command": [
-            //     "~/opt/miniconda3/envs/codetimeline2/bin/python",
-            //     "CodeTimeline.py",
-            //     "--input ~/Developer/transcriptase/src/renderer/matchTimestamps.ts",
-            //     "--output ~/Desktop/CodeTimeline-Output/codetimeline-output.html"],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
