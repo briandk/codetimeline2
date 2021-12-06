@@ -1,5 +1,5 @@
 {
     "python.formatting.provider": "black",
-    "python.formatting.blackPath": "/Users/briandk/opt/miniconda3/envs/codetimeline2/bin/black"
-    // "python.formatting.blackPath": "/opt/homebrew/bin/black",
+    // "python.formatting.blackPath": "/Users/briandk/opt/miniconda3/envs/codetimeline2/bin/black",
+    "python.formatting.blackPath": "/opt/homebrew/bin/black",
 }

@@ -22,16 +22,17 @@ def code_timeline(input: str, output: str) -> None:
     click.echo("All done!")
 
 
-def timeline_template():
-    with open(os.path.join("external_files", "bootstrap.min.js")) as f:
-        bootstrap_script = f.read()
+def external_files() -> dict:
     with open(os.path.join("external_files", "bootstrap.css")) as f:
         bootstrap_css = f.read()
-    return {
-        "bootstrap_css": bootstrap_css,
-        "bootstrap_js": bootstrap_script,
-        "revisions": "revisions",
-    }
+    with open(os.path.join("external_files", "bootstrap.min.js")) as f:
+        bootstrap_script = f.read()
+
+    return {"bootstrap_css": bootstrap_css, "bootstrap_js": bootstrap_script}
+
+
+def timeline_template() -> dict:
+    return external_files()
 
 
 def compile_timeline_template():
