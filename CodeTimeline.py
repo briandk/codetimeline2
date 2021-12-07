@@ -27,8 +27,14 @@ def external_files() -> dict:
         bootstrap_css = f.read()
     with open(os.path.join("external_files", "bootstrap.js")) as f:
         bootstrap_script = f.read()
+    with open(os.path.join("external_files", "jQuery.js")) as f:
+        jquery_script = f.read()
 
-    return {"bootstrap_css": bootstrap_css, "bootstrap_js": bootstrap_script}
+    return {
+        "bootstrap_css": bootstrap_css,
+        "bootstrap_js": bootstrap_script,
+        "jquery_js": jquery_script,
+    }
 
 
 def timeline_template() -> dict:
