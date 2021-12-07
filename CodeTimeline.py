@@ -41,7 +41,7 @@ def timeline_template() -> dict:
     """Returns a data object that can then be
     passed to a Handlebars compiler
     """
-    return external_files()
+    return {"external_files": external_files()}
 
 
 def compile_timeline_template():

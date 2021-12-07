@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="TimelineStyle.css">
   <link rel="stylesheet" type="text/css" href="prism.css">
   <style>
-    {{{bootstrap_css}}}
+    {{{external_files.bootstrap_css}}}
   </style>
 </head>
 
@@ -80,13 +80,15 @@
       </form>
     </div>
   </div>
-  <script src="prism.js" type="text/javascript"></script>
-  <script>{{{jquery_js}}}</script>
-  <script>{{{bootstrap_js}}}</script>
-  <script type="text/javascript">
-    var revisions = [{{{revisions}}}];
-  </script>
-  <script src="Timeline.js" type="text/javascript"></script>
+  {{#with external_files}}
+    <script src="prism.js" type="text/javascript"></script>
+    <script>{{{jquery_js}}}</script>
+    <script>{{{bootstrap_js}}}</script>
+    <script type="text/javascript">
+      var revisions = [{{{revisions}}}];
+    </script>
+    <script src="Timeline.js" type="text/javascript"></script>
+  {{/with}}
 </body>
 
 </html>
