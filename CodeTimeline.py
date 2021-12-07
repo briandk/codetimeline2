@@ -14,6 +14,7 @@ from git_manipulation import git_data
     help="An optional name for the output file",
 )
 def code_timeline(input: str, output: str) -> None:
+    git_data(input)
     writeTimelineToFile(output, compile_timeline_template())
     click.echo("All done!")
 
