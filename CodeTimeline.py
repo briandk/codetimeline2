@@ -1,10 +1,9 @@
 import click
 import os
-import sys
 
-from git import Repo
 from pybars import Compiler
 from typing import Union
+from git_manipulation import git_data
 
 
 @click.command()
@@ -15,9 +14,6 @@ from typing import Union
     help="An optional name for the output file",
 )
 def code_timeline(input: str, output: str) -> None:
-    repository = Repo(get_nearest_git_repo(input))
-    # click.echo(f"git directory is {repository}")
-    report_if_repository_is_dirty(repository)
     writeTimelineToFile(output, compile_timeline_template())
     click.echo("All done!")
 
@@ -62,38 +58,6 @@ def writeTimelineToFile(output_path: str, timeline: str) -> None:
     print(f"Output path is {output_path}")
     with open(output_path, "w", encoding="utf8") as f:
         f.write(timeline)
-
-
-def get_nearest_git_repo(filepath: str) -> Union[str, None]:
-    """
-    Takes a filepath and recursively searches upward to find
-    the nearest git repository
-    """
-    # click.echo(f"current directory is {directory}")
-    # click.echo(f"is .git a subdirectory? {os.path.isdir('.git')}")
-
-    if os.path.isdir(os.path.join(filepath, ".git")) is True:
-        return filepath
-
-    head, tail = os.path.split(filepath)
-    if tail != "":
-        return get_nearest_git_repo(head)
-    else:
-        return None
-
-
-def report_if_repository_is_dirty(repo: Repo) -> None:
-    if repo.is_dirty():
-        click.echo(
-            """
-ERROR: Repo not clean.
-It looks like some files in this repo haven't had their changes committed.
-Please get the repository into a clean state before running CodeTimeline
-"""
-        )
-        sys.exit()
-    else:
-        return None
 
 
 def sanitize_filepath(filepath: str) -> str:
