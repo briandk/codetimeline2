@@ -12,9 +12,8 @@ def git_data(filepath: str) -> list[str]:
     timeline_view template
     """
     repo = find_nearest_git_repo(filepath)
-    active_branch = repo.active_branch
     blame_data = repo.blame(rev=repo.active_branch, file=filepath)
-    return blame_data[0][0]
+    return blame_data
 
 
 def find_nearest_git_repo(filepath: str) -> Union[Repo, None]:
@@ -25,8 +24,6 @@ def find_nearest_git_repo(filepath: str) -> Union[Repo, None]:
     is_git_repo = os.path.isdir(os.path.join(filepath, ".git"))
     if is_git_repo:
         os.chdir(filepath)
-        click.echo(f"repo path is {filepath}")
-        click.echo(f"current working directory is {os.getcwd()}")
         my_repo = Repo(path=filepath)
         report_if_repository_is_dirty(my_repo)
         return my_repo
@@ -40,7 +37,6 @@ def find_nearest_git_repo(filepath: str) -> Union[Repo, None]:
 
 def report_if_repository_is_dirty(repo: Repo) -> None:
     click.echo("checking whether repository is dirty...")
-    click.echo(f"Repo is {repo}")
     if repo.is_dirty():
         click.echo(
             """ERROR: Repo not clean.

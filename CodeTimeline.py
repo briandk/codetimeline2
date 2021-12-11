@@ -17,9 +17,12 @@ def code_timeline(input: str, output: str) -> None:
     external_js_and_css = external_files()
     template = timeline_template()
     input_file = sanitize_filepath(input)
-    revisions = timeline_data(sanitize_filepath(input_file))
-    timeline = template({"revisions": revisions, "external_files": external_js_and_css})
-
+    template_data = {
+        "snapshots": git_data(input_file),
+        "external_files": external_js_and_css,
+    }
+    click.echo(template_data["snapshots"])
+    timeline = template(template_data)
     writeTimelineToFile(output, timeline)
     click.echo("All done!")
 
@@ -39,13 +42,6 @@ def external_files() -> dict[str:str]:
     }
 
 
-def timeline_data(input_file: str) -> dict:
-    """Takes an input filepath and returns a data object that can
-    then be passed as input to a Handlebars compiler
-    """
-    return {"revisions": git_data(input_file)}
-
-
 def timeline_template():
     """Returns a compiled handlebars template (as a function),
     which can be called on an input data object to produce HTML
@@ -61,7 +57,7 @@ def writeTimelineToFile(output_path: str, timeline: str) -> None:
     """
     Writes the CodeTimeline HTML out to a file
     """
-    print(f"Output path is {output_path}")
+    click.echo(f"Output path is {output_path}")
     with open(output_path, "w", encoding="utf8") as f:
         f.write(timeline)
 
