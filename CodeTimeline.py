@@ -21,7 +21,6 @@ def code_timeline(input: str, output: str) -> None:
         "snapshots": git_data(input_file),
         "external_files": external_js_and_css,
     }
-    click.echo(template_data["snapshots"])
     timeline = template(template_data)
     writeTimelineToFile(output, timeline)
     click.echo("All done!")
@@ -34,12 +33,18 @@ def external_files() -> dict[str:str]:
         bootstrap_js = f.read()
     with open(os.path.join("external_files", "jQuery.js")) as f:
         jquery_js = f.read()
+    with open(os.path.join("external_files", "TimelineStyle.css")) as f:
+        timeline_style_css = f.read()
 
     return {
         "css": [
             bootstrap_css,
+            timeline_style_css,
         ],
-        "js": [jquery_js, bootstrap_js],
+        "js": [
+            jquery_js,
+            bootstrap_js,
+        ],
     }
 
 

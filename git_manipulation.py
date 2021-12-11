@@ -36,7 +36,6 @@ def find_nearest_git_repo(filepath: str) -> Union[Repo, None]:
 
 
 def report_if_repository_is_dirty(repo: Repo) -> None:
-    click.echo("checking whether repository is dirty...")
     if repo.is_dirty():
         click.echo(
             """ERROR: Repo not clean.
