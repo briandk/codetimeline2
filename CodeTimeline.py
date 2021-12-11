@@ -14,12 +14,17 @@ from git_manipulation import git_data
     help="An optional name for the output file",
 )
 def code_timeline(input: str, output: str) -> None:
-    git_data(input)
-    writeTimelineToFile(output, compile_timeline_template())
+    external_js_and_css = external_files()
+    template = timeline_template()
+    input_file = sanitize_filepath(input)
+    revisions = timeline_data(sanitize_filepath(input_file))
+    timeline = template({"revisions": revisions, "external_files": external_js_and_css})
+
+    writeTimelineToFile(output, timeline)
     click.echo("All done!")
 
 
-def external_files() -> dict:
+def external_files() -> dict[str:str]:
     with open(os.path.join("external_files", "bootstrap.css")) as f:
         bootstrap_css = f.read()
     with open(os.path.join("external_files", "bootstrap.js")) as f:
@@ -34,22 +39,22 @@ def external_files() -> dict:
     }
 
 
-def timeline_template() -> dict:
-    """Returns a data object that can then be
-    passed to a Handlebars compiler
+def timeline_data(input_file: str) -> dict:
+    """Takes an input filepath and returns a data object that can
+    then be passed as input to a Handlebars compiler
     """
-    return {"external_files": external_files()}
+    return {"revisions": git_data(input_file)}
 
 
-def compile_timeline_template():
-    """Injects the CodeTimeline data into the template
-    and returns a single HTML document
+def timeline_template():
+    """Returns a compiled handlebars template (as a function),
+    which can be called on an input data object to produce HTML
     """
     compiler = Compiler()
     with open("timeline_view.handlebars", "r", encoding="utf8") as f:
         raw_template = f.read()
     template = compiler.compile(raw_template)
-    return str(template(timeline_template()))
+    return template
 
 
 def writeTimelineToFile(output_path: str, timeline: str) -> None:

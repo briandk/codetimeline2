@@ -6,23 +6,30 @@ from typing import Union
 from git import Repo
 
 
-def git_data(filepath: str) -> dict:
+def git_data(filepath: str) -> list[str]:
     """Takes the path to a file and returns a
-    data object that can be injected into the
+    data object about that file that can be injected into the
     timeline_view template
     """
     repo = Repo(find_nearest_git_repo(filepath))
-    report_if_repository_is_dirty(repo)
+    active_branch = repo.active_branch
+    blame_data = repo.blame(rev=repo.active_branch, file=filepath)
+    return blame_data[0][0]
 
 
-def find_nearest_git_repo(filepath: str) -> Union[str, None]:
+def find_nearest_git_repo(filepath: str) -> Union[Repo, None]:
     """
     Takes a filepath and recursively searches upward to find
     the nearest git repository
     """
-    if os.path.isdir(os.path.join(filepath, ".git")) is True:
+    is_git_repo = os.path.isdir(os.path.join(filepath, ".git"))
+    if is_git_repo:
+        os.chdir(filepath)
         click.echo(f"repo path is {filepath}")
-        return filepath
+        click.echo(f"current working directory is {os.getcwd()}")
+        my_repo = Repo(path=filepath)
+        report_if_repository_is_dirty(my_repo)
+        return my_repo
 
     head, tail = os.path.split(filepath)
     if tail != "":
@@ -33,6 +40,7 @@ def find_nearest_git_repo(filepath: str) -> Union[str, None]:
 
 def report_if_repository_is_dirty(repo: Repo) -> None:
     click.echo("checking whether repository is dirty...")
+    click.echo(f"Repo is {repo}")
     if repo.is_dirty():
         click.echo(
             """ERROR: Repo not clean.
