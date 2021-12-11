@@ -11,7 +11,7 @@ def git_data(filepath: str) -> list[str]:
     data object about that file that can be injected into the
     timeline_view template
     """
-    repo = Repo(find_nearest_git_repo(filepath))
+    repo = find_nearest_git_repo(filepath)
     active_branch = repo.active_branch
     blame_data = repo.blame(rev=repo.active_branch, file=filepath)
     return blame_data[0][0]
