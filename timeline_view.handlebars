@@ -128,25 +128,22 @@
       <tr>
         {{#each snapshots}}
           <td>
-            {{this}}
+            {{#each this}}
+              {{this}}
+            {{/each}}
           </td>
         {{/each}}
       </tr>
     </table>
-    {{#with external_files}}
-      <script src="prism.js" type="text/javascript"></script>
-      <script>
-        {{{jquery_js}}}
-      </script>
-      <script>
-        {{{bootstrap_js}}}
-      </script>
+    {{#each external_files}}
       <script type="text/javascript">
-        var revisions = [
-        {{{revisions}}}
-        ];
+        {{{this}}}
       </script>
-      <script src="Timeline.js" type="text/javascript"></script>
-    {{/with}}
+    {{/each}}
+    <script type="text/javascript">
+      var revisions = [
+      {{{revisions}}}
+      ];
+    </script>
   </body>
 </html>
