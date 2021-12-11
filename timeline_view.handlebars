@@ -6,9 +6,11 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="TimelineStyle.css" />
     <link rel="stylesheet" type="text/css" href="prism.css" />
-    <style>
-      {{{external_files.bootstrap_css}}}
-    </style>
+    {{#each external_files.css}}
+      <style>
+        {{{this}}}
+      </style>
+    {{/each}}
   </head>
   <body class="pad-body-for-navbar">
     <div class="navbar navbar-fixed-top">
@@ -135,7 +137,7 @@
         {{/each}}
       </tr>
     </table>
-    {{#each external_files}}
+    {{#each external_files.js}}
       <script type="text/javascript">
         {{{this}}}
       </script>

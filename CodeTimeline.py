@@ -31,14 +31,15 @@ def external_files() -> dict[str:str]:
     with open(os.path.join("external_files", "bootstrap.css")) as f:
         bootstrap_css = f.read()
     with open(os.path.join("external_files", "bootstrap.js")) as f:
-        bootstrap_script = f.read()
+        bootstrap_js = f.read()
     with open(os.path.join("external_files", "jQuery.js")) as f:
-        jquery_script = f.read()
+        jquery_js = f.read()
 
     return {
-        "bootstrap_css": bootstrap_css,
-        "bootstrap_js": bootstrap_script,
-        "jquery_js": jquery_script,
+        "css": [
+            bootstrap_css,
+        ],
+        "js": [jquery_js, bootstrap_js],
     }
 
 
