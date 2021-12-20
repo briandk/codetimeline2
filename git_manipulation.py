@@ -13,7 +13,25 @@ def git_data(filepath: str) -> list[str]:
     """
     repo = find_nearest_git_repo(filepath)
     blame_data = repo.blame(rev=repo.active_branch, file=filepath)
-    return blame_data
+    raw_source_code = source_code(blame_data)
+    click.echo(raw_source_code)
+    return [raw_source_code]
+
+
+def source_code(blame_data) -> list[str]:
+    """
+    Takes a blame view (list of [commit, [lines]]) and extracts out raw source code lines
+    """
+
+    raw_lines: list[str] = list()
+
+    for entry in blame_data:
+        lines = entry[1]
+        for line in lines:
+            raw_lines.append(line)
+
+    return "\n".join(raw_lines).strip()
+    # return "\n".join([line for line in blamelet[1]])
 
 
 def find_nearest_git_repo(filepath: str) -> Union[Repo, None]:
