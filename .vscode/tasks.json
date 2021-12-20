@@ -9,7 +9,7 @@
             "command": [
                 "/opt/homebrew/bin/python3",
                 "CodeTimeline.py",
-                "--input /Users/briandk/Developer/transcriptase/README.md",
+                "--input /Users/briandk/Developer/transcriptase/src/renderer/matchTimestamps.ts",
                 "--output ~/Desktop/CodeTimeline-Output/codetimeline-output.html"
             ],
             "problemMatcher": [],
