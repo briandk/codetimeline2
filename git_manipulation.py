@@ -20,8 +20,15 @@ def git_data(filepath: str) -> list[str]:
     blame_data = repo.blame(rev=repo.active_branch, file=filepath)
     raw_source_code = source_code(blame_data)
     lexer = guess_lexer_for_filename(filepath, raw_source_code)
-    highlighted_code = highlight(raw_source_code, lexer, HtmlFormatter())
+    highlighted_code = highlight(
+        raw_source_code,
+        lexer,
+        HtmlFormatter(linenos=True, hl_lines=[1, 2, 3, 11], wrapcode=True),
+    )
     return [highlighted_code]
+
+
+# def highlighted_source_code
 
 
 def source_code(blame_data) -> list[str]:
