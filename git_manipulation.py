@@ -5,6 +5,11 @@ from typing import Union
 
 from git import Repo
 
+from pygments import highlight
+from pygments.formatters.html import HtmlFormatter
+from pygments.lexers import guess_lexer
+from pygments.lexers import guess_lexer_for_filename
+
 
 def git_data(filepath: str) -> list[str]:
     """Takes the path to a file and returns a
@@ -14,8 +19,9 @@ def git_data(filepath: str) -> list[str]:
     repo = find_nearest_git_repo(filepath)
     blame_data = repo.blame(rev=repo.active_branch, file=filepath)
     raw_source_code = source_code(blame_data)
-    click.echo(raw_source_code)
-    return [raw_source_code]
+    lexer = guess_lexer_for_filename(filepath, raw_source_code)
+    highlighted_code = highlight(raw_source_code, lexer, HtmlFormatter())
+    return [highlighted_code]
 
 
 def source_code(blame_data) -> list[str]:
@@ -57,6 +63,7 @@ def report_if_repository_is_dirty(repo: Repo) -> None:
     if repo.is_dirty():
         click.echo(
             """ERROR: Repo not clean.
+
 It looks like some files in this repo haven't had their changes committed.
 Please get the repository into a clean state before running CodeTimeline
 """

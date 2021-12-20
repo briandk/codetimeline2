@@ -3,7 +3,9 @@ import os
 
 from pybars import Compiler
 from typing import Union
+
 from git_manipulation import git_data
+from pygments.formatters import HtmlFormatter
 
 
 @click.command()
@@ -36,9 +38,12 @@ def external_files() -> dict[str:str]:
     with open(os.path.join("external_files", "TimelineStyle.css")) as f:
         timeline_style_css = f.read()
 
+    pygments_css = HtmlFormatter().get_style_defs(".highlight")
+
     return {
         "css": [
             bootstrap_css,
+            pygments_css,
             timeline_style_css,
         ],
         "js": [
