@@ -6,6 +6,7 @@ from typing import Any
 from typing import Union
 
 from git import Repo
+from git import Commit
 
 from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
@@ -23,6 +24,23 @@ def git_data(filepath: str) -> tuple[Any]:
     return tuple(snapshots)
 
 
+def compose_snapshot(repo: Repo, filepath: str) -> str:
+    """
+    Takes a repo and a filepath and returns
+    an HTML string representing the tokenized source code
+    for one revision of a file.
+    """
+    blame_data = extract_blamelets(repo, filepath)
+    raw_source_code = source_code(blame_data)
+    lexer = guess_lexer_for_filename(filepath, raw_source_code)
+    highlighted_code = highlight(
+        raw_source_code,
+        lexer,
+        HtmlFormatter(linenos=True, wrapcode=True),
+    )
+    return [highlighted_code]
+
+
 def extract_blamelets(repo: Repo, filepath: str):
     """
     Takes GitPython's compactified blame representation,
@@ -36,18 +54,6 @@ def extract_blamelets(repo: Repo, filepath: str):
         for line in entry[1]:
             blame_data.append({"commit": entry[0], "code": line})
     return tuple(blame_data)
-
-
-def compose_snapshot(repo: Repo, filepath: str) -> str:
-    blame_data = extract_blamelets(repo, filepath)
-    raw_source_code = source_code(blame_data)
-    lexer = guess_lexer_for_filename(filepath, raw_source_code)
-    highlighted_code = highlight(
-        raw_source_code,
-        lexer,
-        HtmlFormatter(linenos=True, wrapcode=True),
-    )
-    return [highlighted_code]
 
 
 def source_code(blame_data) -> str:
