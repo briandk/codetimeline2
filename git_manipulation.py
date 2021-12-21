@@ -14,6 +14,15 @@ from pygments.lexers import guess_lexer
 from pygments.lexers import guess_lexer_for_filename
 
 
+def revisions_of_file(repo: Repo, filepath: str):
+    revisons = [
+        commit.hexsha
+        for commit in repo.iter_commits(rev=repo.active_branch, paths=filepath)
+    ]
+
+    return tuple(revisons)
+
+
 def git_data(filepath: str) -> tuple[Any]:
     """Takes the path to a file and returns a
     data object about that file that can be injected into the
