@@ -1,6 +1,8 @@
 import click
 import os
 import sys
+
+from typing import Any
 from typing import Union
 
 from git import Repo
@@ -11,39 +13,51 @@ from pygments.lexers import guess_lexer
 from pygments.lexers import guess_lexer_for_filename
 
 
-def git_data(filepath: str) -> list[str]:
+def git_data(filepath: str) -> tuple[Any]:
     """Takes the path to a file and returns a
     data object about that file that can be injected into the
     timeline_view template
     """
     repo = find_nearest_git_repo(filepath)
-    blame_data = repo.blame(rev=repo.active_branch, file=filepath)
+    snapshots = compose_snapshot(repo, filepath)
+    return tuple(snapshots)
+
+
+def extract_blamelets(repo: Repo, filepath: str):
+    """
+    Takes GitPython's compactified blame representation,
+    which is list[<commit>, list[source_lines]]
+    and expands out to tuple[<commit>, source_line] for each line in the source code.
+    """
+    compact_blame_data = repo.blame(rev=repo.active_branch, file=filepath)
+    blame_data = list()
+
+    for entry in compact_blame_data:
+        for line in entry[1]:
+            blame_data.append({"commit": entry[0], "code": line})
+    return tuple(blame_data)
+
+
+def compose_snapshot(repo: Repo, filepath: str) -> str:
+    blame_data = extract_blamelets(repo, filepath)
     raw_source_code = source_code(blame_data)
     lexer = guess_lexer_for_filename(filepath, raw_source_code)
     highlighted_code = highlight(
         raw_source_code,
         lexer,
-        HtmlFormatter(linenos=True, hl_lines=[1, 2, 3, 11], wrapcode=True),
+        HtmlFormatter(linenos=True, wrapcode=True),
     )
     return [highlighted_code]
 
 
-# def highlighted_source_code
-
-
-def source_code(blame_data) -> list[str]:
+def source_code(blame_data) -> str:
     """
     Takes a blame view (list of [commit, [lines]]) and extracts out raw source code lines
     """
 
-    raw_lines: list[str] = list()
+    raw_lines = [blamelet["code"] for blamelet in blame_data]
 
-    for entry in blame_data:
-        lines = entry[1]
-        for line in lines:
-            raw_lines.append(line)
-
-    return "\n".join(raw_lines).strip()
+    return "\n".join(raw_lines)
     # return "\n".join([line for line in blamelet[1]])
 
 
