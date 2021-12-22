@@ -37,6 +37,8 @@ def external_files() -> dict[str:str]:
         jquery_js = f.read()
     with open(os.path.join("external_files", "TimelineStyle.css")) as f:
         timeline_style_css = f.read()
+    with open(os.path.join("external_files", "Timeline.js")) as f:
+        timeline_js = f.read()
 
     pygments_css = HtmlFormatter().get_style_defs(".highlight")
 
@@ -46,10 +48,7 @@ def external_files() -> dict[str:str]:
             pygments_css,
             timeline_style_css,
         ],
-        "js": [
-            jquery_js,
-            bootstrap_js,
-        ],
+        "js": [jquery_js, bootstrap_js, timeline_js],
     }
 
 
@@ -81,7 +80,7 @@ def sanitize_filepath(filepath: str) -> str:
     filepath = os.path.expanduser(filepath)
     if not os.path.isabs(filepath):
         filepath = os.path.join(os.getcwd(), filepath)
-    filepath = os.path.normpath(filepath)
+    filepath = os.path.realpath(os.path.normpath(filepath))
     return filepath
 
 
