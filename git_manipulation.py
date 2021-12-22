@@ -14,7 +14,7 @@ from pygments.lexers import guess_lexer
 from pygments.lexers import guess_lexer_for_filename
 
 
-def revisions_of_file(repo: Repo, filepath: str):
+def revisions_of_file(repo: Repo, filepath: str) -> tuple[str]:
     revisons = [
         commit.hexsha
         for commit in repo.iter_commits(rev=repo.active_branch, paths=filepath)
@@ -23,23 +23,30 @@ def revisions_of_file(repo: Repo, filepath: str):
     return tuple(revisons)
 
 
+def compose_snapshots(repo: Repo, filepath: str):
+    revisions = revisions_of_file(repo, filepath)
+    snapshots = [compose_snapshot(repo, filepath, rev) for rev in revisions]
+
+    return tuple(snapshots)
+
+
 def git_data(filepath: str) -> tuple[Any]:
     """Takes the path to a file and returns a
     data object about that file that can be injected into the
     timeline_view template
     """
     repo = find_nearest_git_repo(filepath)
-    snapshots = compose_snapshot(repo, filepath)
+    snapshots = compose_snapshots(repo, filepath)
     return tuple(snapshots)
 
 
-def compose_snapshot(repo: Repo, filepath: str) -> str:
+def compose_snapshot(repo: Repo, filepath: str, revision: str) -> str:
     """
-    Takes a repo and a filepath and returns
-    an HTML string representing the tokenized source code
-    for one revision of a file.
+    Takes a repo, a filepath, and a hexsha for a revision, then returns
+    an HTML string representing the entire tokenized source code
+    for that file at that revision.
     """
-    blame_data = extract_blamelets(repo, filepath)
+    blame_data = extract_blamelets(repo, filepath, revision)
     raw_source_code = source_code(blame_data)
     lexer = guess_lexer_for_filename(filepath, raw_source_code)
     highlighted_code = highlight(
@@ -47,16 +54,16 @@ def compose_snapshot(repo: Repo, filepath: str) -> str:
         lexer,
         HtmlFormatter(linenos=True, wrapcode=True),
     )
-    return [highlighted_code]
+    return highlighted_code
 
 
-def extract_blamelets(repo: Repo, filepath: str):
+def extract_blamelets(repo: Repo, filepath: str, revision: str):
     """
     Takes GitPython's compactified blame representation,
     which is list[<commit>, list[source_lines]]
     and expands out to tuple[<commit>, source_line] for each line in the source code.
     """
-    compact_blame_data = repo.blame(rev=repo.active_branch, file=filepath)
+    compact_blame_data = repo.blame(rev=revision, file=filepath)
     blame_data = list()
 
     for entry in compact_blame_data:
@@ -71,6 +78,7 @@ def source_code(blame_data) -> str:
     """
 
     raw_lines = [blamelet["code"] for blamelet in blame_data]
+    print("\n".join(raw_lines))
 
     return "\n".join(raw_lines)
     # return "\n".join([line for line in blamelet[1]])
