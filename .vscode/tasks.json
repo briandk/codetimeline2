@@ -4,6 +4,21 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Run CodeTimeline on matchTimestamps.ts",
+            "type": "shell",
+            "command": [
+                "/opt/homebrew/bin/python3",
+                "CodeTimeline.py",
+                "--input /Users/briandk/Developer/transcriptase/src/renderer/matchTimestamps.ts",
+                "--output ~/Desktop/CodeTimeline-Output/codetimeline-output.html"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true,
+            },
+        },
+        {
             "label": "CodeTimeline - Work Laptop",
             "type": "shell",
             "command": [
