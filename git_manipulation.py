@@ -52,9 +52,21 @@ def compose_snapshot(repo: Repo, filepath: str, revision: str) -> str:
     highlighted_code = highlight(
         raw_source_code,
         lexer,
-        HtmlFormatter(linenos=True, wrapcode=True),
+        HtmlFormatter(
+            linenos=True,
+            wrapcode=True,
+            hl_lines=highlighted_lines(blame_data, revision),
+        ),
     )
     return highlighted_code
+
+
+def highlighted_lines(blame_data, revision: str):
+    return [
+        blamelet["line_number"]
+        for blamelet in blame_data
+        if blamelet["commit"].hexsha == revision
+    ]
 
 
 def extract_blamelets(repo: Repo, filepath: str, revision: str):
@@ -68,7 +80,14 @@ def extract_blamelets(repo: Repo, filepath: str, revision: str):
 
     for entry in compact_blame_data:
         for line in entry[1]:
-            blame_data.append({"commit": entry[0], "code": line})
+            blame_data.append({"commit": entry[0], "code": line, "line_number": None})
+
+    for (index, value) in enumerate(blame_data):
+        print("length of blame_data is: ", len(blame_data))
+        print("index is: ", index)
+        print("value is: ", value)
+        blame_data[index]["line_number"] = index
+
     return tuple(blame_data)
 
 
