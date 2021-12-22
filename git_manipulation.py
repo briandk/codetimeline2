@@ -55,13 +55,13 @@ def compose_snapshot(repo: Repo, filepath: str, revision: str) -> str:
         HtmlFormatter(
             linenos=True,
             wrapcode=True,
-            hl_lines=highlighted_lines(blame_data, revision),
+            hl_lines=line_numbers_to_highlight(blame_data, revision),
         ),
     )
-    return highlighted_code
+    return {"highlighted_code": highlighted_code, "short_sha": revision[0:9]}
 
 
-def highlighted_lines(blame_data, revision: str):
+def line_numbers_to_highlight(blame_data, revision: str):
     return [
         blamelet["line_number"]
         for blamelet in blame_data
@@ -83,9 +83,6 @@ def extract_blamelets(repo: Repo, filepath: str, revision: str):
             blame_data.append({"commit": entry[0], "code": line, "line_number": None})
 
     for (index, value) in enumerate(blame_data):
-        print("length of blame_data is: ", len(blame_data))
-        print("index is: ", index)
-        print("value is: ", value)
         blame_data[index]["line_number"] = index
 
     return tuple(blame_data)
@@ -93,13 +90,12 @@ def extract_blamelets(repo: Repo, filepath: str, revision: str):
 
 def source_code(blame_data) -> str:
     """
-    Takes a blame view (list of [commit, [lines]]) and extracts out raw source code lines
+    Takes a blame view (list of [<commit>, [lines]]) and extracts out raw source code lines
     """
 
-    raw_lines = [blamelet["code"] for blamelet in blame_data]
-    print("\n".join(raw_lines))
+    source_code = [blamelet["code"] for blamelet in blame_data]
 
-    return "\n".join(raw_lines)
+    return "\n".join(source_code)
     # return "\n".join([line for line in blamelet[1]])
 
 
