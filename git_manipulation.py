@@ -81,8 +81,12 @@ def extract_blamelets(repo: Repo, filepath: str, revision: str):
         for line in entry[1]:
             blame_data.append({"commit": entry[0], "code": line, "line_number": None})
 
+    # Why are we doing `index + 1` instead of index?
+    #
+    # Because the blame view is zero-indexed, but pygments's `hl_lines`
+    #    argument assumes lines start at number 1
     for (index, value) in enumerate(blame_data):
-        blame_data[index]["line_number"] = index
+        blame_data[index]["line_number"] = index + 1
 
     return tuple(blame_data)
 
