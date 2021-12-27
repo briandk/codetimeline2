@@ -1,5 +1,5 @@
 // Handling type-ahead functionality
-$('#shaSearch').typeahead( {source: revisions} );
+// $('#shaSearch').typeahead({ source: revisions });
 
 var timeline = {};
 timeline.revisions = revisions;
@@ -9,10 +9,10 @@ timeline.currentSha = "";
 timeline.zoomLevel = 1;
 timeline.shortShaLength = 8;
 timeline.toggleBtn = function () { $(this).toggleClass("active") };
-timeline.goToCommit = function(sha) {
+timeline.goToCommit = function (sha) {
   var destinationOffset = $('#' + sha).offset().left;
   if (parseInt($('body').scrollLeft()) != parseInt(destinationOffset)) {
-    $("body").animate({scrollLeft: destinationOffset}, timeline.scrollSpeed);
+    $("body").animate({ scrollLeft: destinationOffset }, timeline.scrollSpeed);
   }
   timeline.update(sha);
 };
@@ -22,7 +22,7 @@ timeline.navigateToRevisionFromSearch = function () {
   timeline.update(sha);
 };
 
-timeline.update = function(sha) {
+timeline.update = function (sha) {
   timeline.shaCounter = timeline.revisions.indexOf(sha);
   timeline.currentSha = sha;
   shortSha = sha.slice(0, timeline.shortShaLength);
@@ -66,19 +66,19 @@ timeline.bindHashesToShaLinks = function () {
 timeline.zoom = function () {
   var scaleFactor = 1 / parseFloat($(this).attr("data-zoom"));
   var destinationOffset = scaleFactor * $('#' + timeline.currentSha).offset().left;
-  var fontScale = (100/scaleFactor);
+  var fontScale = (100 / scaleFactor);
   var leftOffset = $('#' + timeline.currentSha).offset().left;
   var scale = timeline.getTransform("", "scale(" + scaleFactor + ")");
 
   $('table').css(scale);
-  $("body").animate({scrollLeft: destinationOffset}, 500);
+  $("body").animate({ scrollLeft: destinationOffset }, 500);
   setTimeout(function () { $('.snapshotMetadata').css("font-size", fontScale + '%') }, 501);
-  setTimeout(function () {timeline.goToCommit(timeline.currentSha)}, 645);
+  setTimeout(function () { timeline.goToCommit(timeline.currentSha) }, 645);
   $('.zoomLevel').removeClass("disabled");
   $(this).addClass("disabled");
 };
 
-timeline.getTransform = function(property, value) {
+timeline.getTransform = function (property, value) {
   var propertiesMap = {};
   propertiesMap["-webkit-transform" + property] = value;
   propertiesMap["-ms-transform" + property] = value;
@@ -90,7 +90,7 @@ timeline.getTransform = function(property, value) {
 
 
 $(".toggleable").on('click', timeline.toggleBtn);
-$("#shaForm").on('submit', function () {return(false)});
+$("#shaForm").on('submit', function () { return (false) });
 $("#goToSha").on('click', timeline.navigateToRevisionFromSearch);
 $('#next-commit-btn').on('click', timeline.navigateToCommitFromPager);
 $('#prev-commit-btn').on('click', timeline.navigateToCommitFromPager);
