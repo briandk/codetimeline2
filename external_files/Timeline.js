@@ -2,7 +2,7 @@
 // $('#shaSearch').typeahead({ source: revisions });
 
 var timeline = {};
-timeline.revisions = revisions;
+// timeline.revisions = revisions;
 timeline.scrollSpeed = 300;
 timeline.shaCounter = 0;
 timeline.currentSha = "";
@@ -65,15 +65,15 @@ timeline.bindHashesToShaLinks = function () {
 
 timeline.zoom = function () {
   var scaleFactor = 1 / parseFloat($(this).attr("data-zoom"));
-  var destinationOffset = scaleFactor * $('#' + timeline.currentSha).offset().left;
+  // var destinationOffset = scaleFactor * $('#' + timeline.currentSha).offset().left;
   var fontScale = (100 / scaleFactor);
-  var leftOffset = $('#' + timeline.currentSha).offset().left;
+  // var leftOffset = $('#' + timeline.currentSha).offset().left;
   var scale = timeline.getTransform("", "scale(" + scaleFactor + ")");
 
   $('table').css(scale);
-  $("body").animate({ scrollLeft: destinationOffset }, 500);
+  // $("body").animate({ scrollLeft: destinationOffset }, 500);
   setTimeout(function () { $('.snapshotMetadata').css("font-size", fontScale + '%') }, 501);
-  setTimeout(function () { timeline.goToCommit(timeline.currentSha) }, 645);
+  // setTimeout(function () { timeline.goToCommit(timeline.currentSha) }, 645);
   $('.zoomLevel').removeClass("disabled");
   $(this).addClass("disabled");
 };
@@ -95,5 +95,5 @@ $("#goToSha").on('click', timeline.navigateToRevisionFromSearch);
 $('#next-commit-btn').on('click', timeline.navigateToCommitFromPager);
 $('#prev-commit-btn').on('click', timeline.navigateToCommitFromPager);
 $('.zoomLevel').on('click', timeline.zoom);
-timeline.bindHashesToShaLinks();
-timeline.update(timeline.revisions[0]);
+// timeline.bindHashesToShaLinks();
+// timeline.update(timeline.revisions[0]);

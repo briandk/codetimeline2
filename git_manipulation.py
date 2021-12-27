@@ -30,7 +30,6 @@ def git_data(filepath: str) -> tuple[Any]:
     """
     repo = find_nearest_git_repo(filepath)
     revisions = revisions_of_file(repo, filepath)
-    print(revisions)
     snapshots = [compose_snapshot(repo, filepath, rev) for rev in revisions]
 
     # so the left-most snapshot is the earliest in the timeline
