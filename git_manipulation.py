@@ -23,20 +23,19 @@ def revisions_of_file(repo: Repo, filepath: str) -> tuple[str]:
     return tuple(revisons)
 
 
-def compose_snapshots(repo: Repo, filepath: str):
-    revisions = revisions_of_file(repo, filepath)
-    snapshots = [compose_snapshot(repo, filepath, rev) for rev in revisions]
-
-    return tuple(snapshots)
-
-
 def git_data(filepath: str) -> tuple[Any]:
     """Takes the path to a file and returns a
     data object about that file that can be injected into the
     timeline_view template
     """
     repo = find_nearest_git_repo(filepath)
-    snapshots = compose_snapshots(repo, filepath)
+    revisions = revisions_of_file(repo, filepath)
+    print(revisions)
+    snapshots = [compose_snapshot(repo, filepath, rev) for rev in revisions]
+
+    # so the left-most snapshot is the earliest in the timeline
+    snapshots.reverse()
+
     return tuple(snapshots)
 
 
