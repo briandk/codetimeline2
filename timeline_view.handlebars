@@ -126,14 +126,14 @@
         </form>
       </div>
     </div>
-    <table>
+    <table class="snapshots">
       <tr>
         {{#each snapshots}}
           <td>
             <div>
               {{{this.short_sha}}}
             </div>
-            <div>
+            <div class="snapshot">
               {{{this.highlighted_code}}}
             </div>
           </td>
