@@ -98,7 +98,6 @@ def source_code(blame_data) -> str:
     source_code = [blamelet["code"] for blamelet in blame_data]
 
     return "\n".join(source_code)
-    # return "\n".join([line for line in blamelet[1]])
 
 
 def find_nearest_git_repo(filepath: str) -> Union[Repo, None]:
