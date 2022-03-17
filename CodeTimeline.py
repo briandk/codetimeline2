@@ -31,7 +31,7 @@ def code_timeline(input: str, output: str) -> None:
 def external_files() -> dict[str:str]:
     with open(os.path.join("external_files", "bootstrap.css")) as f:
         bootstrap_css = f.read()
-    with open(os.path.join("external_files", "bootstrap.js")) as f:
+    with open(os.path.join("external_files", "bootstrap.bundle.js")) as f:
         bootstrap_js = f.read()
     with open(os.path.join("external_files", "TimelineStyle.css")) as f:
         timeline_style_css = f.read()
