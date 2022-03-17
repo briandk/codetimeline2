@@ -2,7 +2,6 @@ import click
 import os
 
 from pybars import Compiler
-from typing import Union
 
 from git_manipulation import git_data
 from pygments.formatters import HtmlFormatter
